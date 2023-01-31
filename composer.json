@@ -1,0 +1,49 @@
+{
+    "name": "masterei/laravel-routesentry",
+    "description": "Laravel route-based roles and permissions.",
+    "keywords": [
+        "masterei",
+        "laravel-routesentry",
+        "route-based permissions",
+        "roles and permissions"
+    ],
+    "homepage": "https://github.com/masterei/laravel-routesentry",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Rey Arnejo Jr.",
+            "email": "mastereijunior@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.3|^8.0",
+        "spatie/laravel-permission": "^5.5"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^7.10"
+    },
+    "autoload": {
+        "psr-4": {
+            "Masterei\\Sentry\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Masterei\\Sentry\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Masterei\\Sentry\\SentryServiceProvider"
+            ],
+            "aliases": {
+                "Sentry": "Masterei\\Sentry\\Sentry"
+            }
+        }
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
