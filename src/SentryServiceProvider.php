@@ -5,7 +5,7 @@ namespace Masterei\Sentry;
 use Illuminate\Support\ServiceProvider;
 use Masterei\Sentry\Console\CacheCommand;
 use Masterei\Sentry\Console\CreateRoleCommand;
-use Masterei\Sentry\Console\DefaultCommand;
+use Masterei\Sentry\Console\InstallCommand;
 use Masterei\Sentry\Console\PublishCommand;
 use Masterei\Sentry\Console\ResourceLinkCommand;
 use Masterei\Sentry\Console\ShowCommand;
@@ -63,7 +63,7 @@ class SentryServiceProvider extends ServiceProvider
         $this->commands([
             CacheCommand::class,
             PublishCommand::class,
-            DefaultCommand::class,
+            InstallCommand::class,
             CreateRoleCommand::class,
             ShowCommand::class,
             ShowRoleCommand::class,

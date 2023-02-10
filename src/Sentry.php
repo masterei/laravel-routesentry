@@ -4,9 +4,14 @@ namespace Masterei\Sentry;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Route;
+use Masterei\Sentry\Facades\Guard;
+use Masterei\Sentry\General\Assessor;
 use Masterei\Sentry\General\Config;
+use Masterei\Sentry\General\URI;
 use Masterei\Sentry\Models\Permission;
 use Masterei\Sentry\Models\Role;
+use Spatie\Permission\Exceptions\UnauthorizedException;
 
 class Sentry extends Model
 {
@@ -103,7 +108,10 @@ class Sentry extends Model
 
     public static function getRoles()
     {
-        return Role::get();
+        return Role::get()
+            ->reject(function ($value){
+                return in_array($value->name, Config::get('hidden_roles'));
+            });
     }
 
     public static function getOrigURIList()
@@ -111,8 +119,55 @@ class Sentry extends Model
         return self::getOrig()->pluck('uri')->toArray();
     }
 
-    public static function getByGroup($option = 'group')
+    public static function getByGroup($column = 'group')
     {
-        return parent::get()->groupBy($option);
+        return parent::get()
+            ->map(function($value){
+                switch (strtolower($value->method)){
+                    case 'get':
+                        $value->_sort = 0;
+                        break;
+                    case 'post':
+                        $value->_sort = 1;
+                        break;
+                    case 'patch':
+                        $value->_sort = 2;
+                        break;
+                    case 'put':
+                        $value->_sort = 3;
+                        break;
+                    case 'delete':
+                        $value->_sort = 4;
+                        break;
+                }
+
+                return $value;
+            })
+            ->sortBy(['group', '_sort'])
+            ->map(function ($value){
+                unset($value->_sort);
+                return $value;
+            })
+            ->groupBy($column);
+    }
+
+    public static function checkAccess($route = null, $method = 'get')
+    {
+        return Guard::accessEvaluator($route, $method);
+    }
+
+    public static function isGuestURI($uri = null)
+    {
+        return Assessor::isGuestURI(empty($uri) ? Route::current()->uri : explode('@', $uri)[0]);
+    }
+
+    public static function verifyURIDatabaseExist($uri = null)
+    {
+        return URI::verifyURIDatabaseExist(!empty($uri) ? $uri : URI::getCurrentURI());
+    }
+
+    public static function throwException()
+    {
+        throw UnauthorizedException::forRolesOrPermissions([URI::getCurrentURI()]);
     }
 }

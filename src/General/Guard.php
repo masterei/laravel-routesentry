@@ -2,6 +2,8 @@
 
 namespace Masterei\Sentry\General;
 
+use Masterei\Sentry\Sentry;
+
 class Guard
 {
     public function __construct()
@@ -9,42 +11,17 @@ class Guard
         Cache::ensurePackageCache();
     }
 
-    public static function init()
+    public function accessEvaluator($route, $method)
     {
-        return new self();
-    }
-
-    public function hasAccess($route = null, $method = 'get')
-    {
-        return $this->accessEvaluator($route, $method, 'hasPermissionTo');
-    }
-
-    public function checkAccess($route = null, $method = 'get')
-    {
-        return $this->accessEvaluator($route, $method, 'checkPermissionTo');
-    }
-
-    protected function accessEvaluator($route, $method, $execute_method)
-    {
-        // allow all access
+        // allow all access on debugging mode
         if(Config::get('debug')){
             return true;
         }
 
         $uri = $this->prepareURI($route, $method);
-
-        // allow access if uri does not exist in database
-        if(!URI::verifyURIDatabaseExist($uri)){
-            return true;
-        }
-
-        // allow access if uri is in guest exception
-        if(Assessor::isGuestURI($uri)){
-            return true;
-        }
-
-        // check authenticated user with uri access
-        if(auth()->check() && auth()->user()->$execute_method($uri)){
+        if(Sentry::isGuestURI($uri) // allow if uri is in guest exception list
+            || !Sentry::verifyURIDatabaseExist($uri) // allow if uri does not exist in database
+            || (auth()->check() && auth()->user()->hasAccess($uri))){ // check authenticated user if it has uri access
             return true;
         }
 
@@ -53,17 +30,16 @@ class Guard
 
     protected function prepareURI($route, $method)
     {
-        // base on current route
+        // get current route
         if(empty($route)){
             return URI::getCurrentURI();
         }
 
-        // plain uri given
+        // plain uri
         if(str_contains($route, '/')){
-            return URI::formatURI(trim($route, '/'), $method);
+            return URI::formatURI(trim(explode('@', $route)[0], '/'), $method);
         }
 
-        // base on route name
         return URI::getURIFromRouteName($route);
     }
 }

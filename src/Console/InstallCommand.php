@@ -6,11 +6,11 @@ use Illuminate\Console\Command;
 use Masterei\Sentry\General\Config;
 use Masterei\Sentry\General\Install;
 
-class DefaultCommand extends Command
+class InstallCommand extends Command
 {
-    protected $signature = 'sentry:default';
+    protected $signature = 'sentry:install';
 
-    protected $description = 'Install default settings';
+    protected $description = 'Setup startup data';
 
     public function __construct()
     {

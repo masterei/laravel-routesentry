@@ -16,7 +16,7 @@ class Assessor
                     'route_name' => isset($value->action['as']) ? $value->action['as'] : null,
                     'controller' => isset($value->action['controller']) ? $value->action['controller'] : null,
                     'group' => self::filterController(isset($value->action['controller']) ? $value->action['controller'] : null),
-                    'middleware' => $value->action['middleware']
+                    'middleware' => isset($value->action['middleware']) ? $value->action['middleware'] : []
                 ];
             })->reject(function ($value){
                 return !in_array(Config::GUARD, $value->middleware);
@@ -55,6 +55,11 @@ class Assessor
 
         return preg_replace('/(?<! )(?<!^)(?<![A-Z])[A-Z]_/', ' $0', $str);
     }
+
+//    protected static function assignMiddleware($route)
+//    {
+//        return isset($route->action['middleware']) ? $route->action['middleware'] : ['web'];
+//    }
 
     public static function isGuestURI($uri)
     {

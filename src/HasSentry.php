@@ -2,11 +2,41 @@
 
 namespace Masterei\Sentry;
 
+use Illuminate\Database\Eloquent\Builder;
+use Masterei\Sentry\General\Config;
+use Masterei\Sentry\General\Guard;
 use Masterei\Sentry\Traits\HasRolesProxy;
 
 trait HasSentry
 {
     use HasRolesProxy;
+
+    /**
+     * Exclude current authenticated user.
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopeExcludeCurrentAuth($query)
+    {
+        return $query->where('users.id', '!=', !empty(auth()->user()->id) ? auth()->user()->id : null);
+    }
+
+    /**
+     * Exclude model data for hidden roles.
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopeExcludeWithHiddenRole($query)
+    {
+        return $query
+            ->select('users.*')
+            ->where('model_has_roles.model_type', static::class)
+            ->whereNotIn('roles.name', Config::get('hidden_roles'))
+            ->leftJoin('model_has_roles', 'model_has_roles.model_id', '=', 'users.id')
+            ->leftJoin('roles', 'roles.id', '=', 'model_has_roles.role_id');
+    }
 
     /**
      * Return user's assigned role.
@@ -58,4 +88,16 @@ trait HasSentry
 
         return $this;
     }
+
+    /**
+     * Check model if it has access to a specific route uri.
+     *
+     * @param $uri
+     * @return bool
+     */
+    public function hasAccess($uri)
+    {
+        return $this->hasPermissionTo($uri);
+    }
+
 }
