@@ -22,7 +22,7 @@ class Permission extends Model
         static::deleting(function(parent $permission) {
             // remove corresponding data from sentry table
             Sentry::where('permission_id', $permission->id)->delete();
-      });
+        });
     }
 
     public static function createURIPermission(array $attributes)
