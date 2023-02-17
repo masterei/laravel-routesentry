@@ -103,7 +103,9 @@ class Sentry extends Model
 
     public static function getRole($role)
     {
-        return is_numeric($role) ? Role::findById($role) : Role::findByName($role);
+        return is_numeric($role)
+            ? \Spatie\Permission\Models\Role::findById($role)
+            : \Spatie\Permission\Models\Role::findByName($role);
     }
 
     public static function getRoles()
