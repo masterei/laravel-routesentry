@@ -5,6 +5,7 @@ namespace Masterei\Sentry\General;
 use Illuminate\Support\Facades\DB;
 use Masterei\Sentry\Models\Permission;
 use Masterei\Sentry\Sentry;
+use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
 
 class Cache
@@ -98,7 +99,7 @@ class Cache
     public static function grantAllURIAccessToAdministrativeRoles()
     {
         foreach (Config::get('administrative_access') as $role){
-            Sentry::getRole($role)->grantAllURIAccess();
+            Role::findByName($role)->syncPermissions(\Spatie\Permission\Models\Permission::get());
         }
     }
 }

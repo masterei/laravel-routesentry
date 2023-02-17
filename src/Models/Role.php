@@ -4,8 +4,9 @@ namespace Masterei\Sentry\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\Permission\Traits\HasPermissions;
+use Spatie\Permission\Models\Role as SpatieRole;
 
-class Role extends \Spatie\Permission\Models\Role
+class Role extends SpatieRole
 {
     use HasPermissions {
 //        HasPermissions::checkPermissionTo as protected;
@@ -45,14 +46,14 @@ class Role extends \Spatie\Permission\Models\Role
 //        HasPermissions::syncRoles as protected;
     }
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::addGlobalScope('published', function (Builder $builder) {
-            $builder->whereNotIn('name', config('sentry.hidden_roles'));
-        });
-    }
+//    protected static function boot()
+//    {
+//        parent::boot();
+//
+//        static::addGlobalScope('published', function (Builder $builder) {
+//            $builder->whereNotIn('name', config('sentry.hidden_roles'));
+//        });
+//    }
 
     public function getURIAccess()
     {

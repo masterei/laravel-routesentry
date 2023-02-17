@@ -100,4 +100,8 @@ trait HasSentry
         return $this->hasPermissionTo($uri);
     }
 
+    public function isAdmin()
+    {
+        return in_array($this->getRoleNames()->first(), config('sentry.administrative_access'));
+    }
 }

@@ -50,10 +50,12 @@ class Assessor
             return null;
         }
 
-        $split = explode('\\', explode('@', $controller)[0]);
-        $str = str_ireplace('controller', '', $split[count($split) - 1]);
+        $strip_namespace = str_ireplace("App\\Http\\Controllers\\", '', explode('@', $controller)[0]);
+//        $split = explode('\\', explode('@', $controller)[0]);
+        $strip_controller = str_ireplace('controller', '', $strip_namespace);
+        $replace_slash = str_replace('\\', ' | ', $strip_controller);
 
-        return preg_replace('/(?<! )(?<!^)(?<![A-Z])[A-Z]_/', ' $0', $str);
+        return preg_replace('/(?<! )(?<!^)(?<![A-Z])[A-Z]_/', ' $0', $replace_slash);
     }
 
 //    protected static function assignMiddleware($route)
