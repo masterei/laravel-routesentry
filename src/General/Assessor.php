@@ -8,7 +8,7 @@ class Assessor
 {
     public static function getRoutes()
     {
-        return collect(Route::getRoutes()->get())
+        return collect(Route::getRoutes()->getRoutes())
             ->map(function ($value){
                 return (object) [
                     'uri' => $value->uri,
