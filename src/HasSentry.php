@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Builder;
 use Masterei\Sentry\General\Config;
 use Masterei\Sentry\General\Guard;
 use Masterei\Sentry\Traits\HasRolesProxy;
+use Spatie\Permission\Traits\HasPermissions;
+use Spatie\Permission\Traits\HasRoles;
 
 trait HasSentry
 {
-    use HasRolesProxy;
+    use HasRoles;
 
     /**
      * Exclude current authenticated user.
@@ -97,6 +99,7 @@ trait HasSentry
      */
     public function hasAccess($uri)
     {
+//        dd($uri);
         return $this->hasPermissionTo($uri);
     }
 
