@@ -123,7 +123,8 @@ class Sentry extends Model
 
     public static function getByGroup(string $guard = 'web', $column = 'group')
     {
-        return parent::get()
+        return parent::where('guard_name', $guard)
+            ->get()
             ->map(function($value){
                 switch (strtolower($value->method)){
                     case 'get':
