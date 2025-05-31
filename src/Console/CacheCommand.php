@@ -28,7 +28,7 @@ class CacheCommand extends Command
         Cache::flushDependencyPackageCache();
         Cache::flushPackageCache();
         Cache::ensurePackageDataConsistency();
-        Cache::grantAllURIAccessToAdministrativeRoles();
+        Cache::grantAllURIAccessToAdministrativeRoles($this->argument('guard'));
         $this->info('Permission cache flushed.');
     }
 

@@ -97,10 +97,10 @@ class Cache
         DB::statement("DELETE A FROM $sentry A LEFT JOIN $permission B ON B.id = A.permission_id WHERE B.id IS NULL");
     }
 
-    public static function grantAllURIAccessToAdministrativeRoles()
+    public static function grantAllURIAccessToAdministrativeRoles(string $guard = 'web')
     {
-        foreach (Config::get('administrative_access') as $role){
-            Role::findByName($role)->syncPermissions(\Spatie\Permission\Models\Permission::get());
+        foreach (Config::get('administrative_access') as $roleName){
+            Role::findByName($roleName, $guard)->syncPermissions(\Spatie\Permission\Models\Permission::get());
         }
     }
 }
