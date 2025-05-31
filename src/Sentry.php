@@ -77,8 +77,8 @@ class Sentry extends Model
     }
 
     /** Get original results with '@method' included at the end of uri. */
-    public static function getOrig(){
-        return parent::get()->map(function ($value) {
+    public static function getOrig(string $guard = 'web'){
+        return parent::where('guard_name', $guard)->get()->map(function ($value) {
             return $value->getRawOriginal();
         });
     }

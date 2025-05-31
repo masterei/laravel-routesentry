@@ -12,7 +12,7 @@ class Cache
 {
     public static function flushURIPermissions(string $guard = 'web')
     {
-        $sentry = Sentry::getOrig();
+        $sentry = Sentry::getOrig($guard);
         $routes = Assessor::getRoutes($guard);
 
         return [
