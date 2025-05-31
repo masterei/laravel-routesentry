@@ -17,8 +17,8 @@
         }
     ],
     "require": {
-        "php": "^7.3|^8.0",
-        "spatie/laravel-permission": "^5.5"
+        "php": "^8.0",
+        "spatie/laravel-permission": "^6.18"
     },
     "require-dev": {
         "orchestra/testbench": "^7.10"
