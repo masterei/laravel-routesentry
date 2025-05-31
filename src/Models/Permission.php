@@ -31,7 +31,7 @@ class Permission extends Model
 
         $permission = BasePermission::firstOrCreate([
             'name' => $attributes->uri,
-            'guard_name' => Config::GUARD
+            'guard_name' => $attributes->guard
         ]);
 
         // create new

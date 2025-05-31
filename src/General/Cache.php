@@ -10,13 +10,13 @@ use Spatie\Permission\PermissionRegistrar;
 
 class Cache
 {
-    public static function flushURIPermissions()
+    public static function flushURIPermissions(string $guard = 'web')
     {
         $sentry = Sentry::getOrig();
-        $routes = Assessor::getRoutes();
+        $routes = Assessor::getRoutes($guard);
 
         return [
-            'created' => self::addNewRoutes($sentry, $routes),
+            'created' => self::addNewRoutes($sentry, $routes, $guard),
             'deleted' => self::removeInactiveRoutes($sentry, $routes)
         ];
     }
@@ -32,7 +32,7 @@ class Cache
         cache()->put(Config::get('cache.key'), Sentry::getOrig(), Config::get('cache.expiration_time'));
     }
 
-    protected static function addNewRoutes($sentry, $routes)
+    protected static function addNewRoutes($sentry, $routes, string $guard)
     {
         $un_existed_uri = array_diff($routes->pluck('uri')->toArray(), $sentry->pluck('uri')->toArray());
 
@@ -43,6 +43,7 @@ class Cache
                 'method' => $route->method,
                 'group' => $route->group,
                 'route_name' => $route->route_name,
+                'guard' => $guard
             ]);
         }
 

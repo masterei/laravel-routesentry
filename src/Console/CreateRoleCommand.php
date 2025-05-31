@@ -7,7 +7,7 @@ use Masterei\Sentry\Sentry;
 
 class CreateRoleCommand extends Command
 {
-    protected $signature = 'sentry:create-role {name}';
+    protected $signature = 'sentry:create-role {name} {--guard=web}';
 
     protected $description = 'Create new role';
 
@@ -18,7 +18,7 @@ class CreateRoleCommand extends Command
 
     public function handle()
     {
-        Sentry::createRole(['name' => $this->argument('name')]);
+        Sentry::createRole(['name' => $this->argument('name'), 'guard' => $this->option('guard')]);
         $this->info('New role has been successfully created.');
     }
 }

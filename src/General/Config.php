@@ -6,8 +6,6 @@ class Config
 {
     protected static $config_name = 'sentry';
 
-    const GUARD = 'web';
-
     const FILLABLE = [
         'group',
         'route_name',

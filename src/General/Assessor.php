@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 class Assessor
 {
-    public static function getRoutes()
+    public static function getRoutes(string $guard = 'web')
     {
         return collect(Route::getRoutes()->getRoutes())
             ->map(function ($value){
@@ -18,8 +18,8 @@ class Assessor
                     'group' => self::filterController(isset($value->action['controller']) ? $value->action['controller'] : null),
                     'middleware' => isset($value->action['middleware']) ? $value->action['middleware'] : []
                 ];
-            })->reject(function ($value){
-                return !in_array(Config::GUARD, $value->middleware);
+            })->reject(function ($value) use ($guard){
+                return !in_array($guard, $value->middleware);
             })
             ->reject(function($value){
                 return self::isRouteURIException($value->uri);

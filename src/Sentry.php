@@ -87,7 +87,7 @@ class Sentry extends Model
     {
         return Role::firstOrCreate([
             'name' => $entries['name'],
-            'guard_name' => Config::GUARD
+            'guard_name' => $entries['guard']
         ]);
     }
 

@@ -8,7 +8,7 @@ use Masterei\Sentry\General\Install;
 
 class InstallCommand extends Command
 {
-    protected $signature = 'sentry:install';
+    protected $signature = 'sentry:install {guard=web}';
 
     protected $description = 'Setup startup data';
 
@@ -20,7 +20,7 @@ class InstallCommand extends Command
     public function handle()
     {
         $this->info('Creating default roles.');
-        Install::defaultRoles();
+        Install::defaultRoles($this->argument('guard'));
         $this->info('<fg=yellow;>Roles: ' . implode(', ', Config::get('administrative_access')) . '</>');
     }
 }

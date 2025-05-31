@@ -7,7 +7,7 @@ use Masterei\Sentry\General\Cache;
 
 class CacheCommand extends Command
 {
-    protected $signature = 'sentry:cache';
+    protected $signature = 'sentry:cache {guard=web}';
 
     protected $description = 'Reset the permission cache';
 
@@ -18,7 +18,7 @@ class CacheCommand extends Command
 
     public function handle()
     {
-        $results = Cache::flushURIPermissions();
+        $results = Cache::flushURIPermissions($this->argument('guard'));
 
         $this->displayCreated($results['created']);
         $this->addNewLine($results['deleted']);
