@@ -121,7 +121,7 @@ class Sentry extends Model
         return self::getOrig()->pluck('uri')->toArray();
     }
 
-    public static function getByGroup($column = 'group')
+    public static function getByGroup(string $guard = 'web', $column = 'group')
     {
         return parent::get()
             ->map(function($value){
