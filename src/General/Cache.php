@@ -100,7 +100,7 @@ class Cache
     public static function grantAllURIAccessToAdministrativeRoles(string $guard = 'web')
     {
         foreach (Config::get('administrative_access') as $roleName){
-            Role::findByName($roleName, $guard)->syncPermissions(\Spatie\Permission\Models\Permission::get());
+            Role::findByName($roleName, $guard)->syncPermissions(\Spatie\Permission\Models\Permission::whereGuardName($guard)->get());
         }
     }
 }
