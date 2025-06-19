@@ -26,10 +26,10 @@ class Cache
         return app(PermissionRegistrar::class)->forgetCachedPermissions();
     }
 
-    public static function flushPackageCache()
+    public static function flushPackageCache(string $currentGuard)
     {
         cache()->forget(Config::get('cache.key'));
-        cache()->put(Config::get('cache.key'), Sentry::getOrig(), Config::get('cache.expiration_time'));
+        cache()->put(Config::get('cache.key') . ".$currentGuard", Sentry::getOrig($currentGuard), Config::get('cache.expiration_time'));
     }
 
     protected static function addNewRoutes($sentry, $routes, string $guard)
@@ -83,10 +83,10 @@ class Cache
         return $inactive_data;
     }
 
-    public static function ensurePackageCache()
+    public static function ensurePackageCache(string $currentGuard)
     {
         if(!cache()->has(Config::get('cache.key'))){
-            self::flushPackageCache();
+            self::flushPackageCache($currentGuard);
         }
     }
 

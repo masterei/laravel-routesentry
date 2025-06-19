@@ -19,7 +19,11 @@ class Assessor
                     'middleware' => isset($value->action['middleware']) ? $value->action['middleware'] : []
                 ];
             })->reject(function ($value) use ($guard){
-                return !in_array($guard, $value->middleware);
+                $containsGuard = count(array_filter($value->middleware, function ($middleware) use ($guard) {
+                    return preg_match('/(^|:)' . preg_quote($guard, '/') . '$/', $middleware);
+                }));
+
+                return !($containsGuard > 0);
             })
             ->reject(function($value){
                 return self::isRouteURIException($value->uri);

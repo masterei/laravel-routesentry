@@ -26,7 +26,7 @@ class CacheCommand extends Command
 
         $this->addNewLine(array_merge($results['created'], $results['deleted']));
         Cache::flushDependencyPackageCache();
-        Cache::flushPackageCache();
+        Cache::flushPackageCache($this->argument('guard'));
         Cache::ensurePackageDataConsistency();
         Cache::grantAllURIAccessToAdministrativeRoles($this->argument('guard'));
         $this->info('Permission cache flushed.');

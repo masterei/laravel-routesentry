@@ -11,6 +11,8 @@ use Masterei\Sentry\Console\ResourceLinkCommand;
 use Masterei\Sentry\Console\ShowCommand;
 use Masterei\Sentry\Console\ShowRoleCommand;
 use Masterei\Sentry\Console\ShowURICommand;
+use Masterei\Sentry\Console\TruncateDatabaseCommand;
+use Illuminate\Routing\Router;
 
 class SentryServiceProvider extends ServiceProvider
 {
@@ -22,6 +24,13 @@ class SentryServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(__DIR__.'/../config/sentry.php', 'sentry');
+
+        // registering middleware
+        $this->app->booted(function () {
+            $router = $this->app->make(Router::class);
+
+            $router->aliasMiddleware('sentry', SentryMiddleware::class);
+        });
     }
 
     /**
@@ -32,12 +41,7 @@ class SentryServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishableFiles();
-
-        $this->loadMiddleware();
         $this->loadConsoleCommands();
-        $this->loadViews();
-        $this->loadRoutes();
-
     }
 
     protected function publishableFiles()
@@ -45,13 +49,6 @@ class SentryServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../config/sentry.php' => config_path('sentry.php')
         ], 'sentry');
-    }
-
-    protected function loadMiddleware()
-    {
-        $router = $this->app['router'];
-        $router->aliasMiddleware('sentry', SentryMiddleware::class);
-        $router->pushMiddlewareToGroup('web', SentryMiddleware::class);
     }
 
     protected function loadConsoleCommands()
@@ -69,17 +66,8 @@ class SentryServiceProvider extends ServiceProvider
             ShowRoleCommand::class,
             ShowURICommand::class,
             ResourceLinkCommand::class,
+            TruncateDatabaseCommand::class,
 
         ]);
-    }
-
-    protected function loadViews()
-    {
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'sentry');
-    }
-
-    protected function loadRoutes()
-    {
-        $this->loadRoutesFrom(__DIR__.'/web.php');
     }
 }

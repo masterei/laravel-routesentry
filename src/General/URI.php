@@ -38,9 +38,9 @@ class URI
         return null;
     }
 
-    public static function verifyURIDatabaseExist($uri)
+    public static function verifyURIDatabaseExist(string $uri, string $guardName)
     {
-        foreach (cache()->get(Config::get('cache.key')) as $value){
+        foreach (cache()->get(Config::get('cache.key') . ".$guardName") as $value){
             if($value['uri'] == $uri){
                 return true;
             }

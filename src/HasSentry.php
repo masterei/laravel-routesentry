@@ -97,10 +97,9 @@ trait HasSentry
      * @param $uri
      * @return bool
      */
-    public function hasAccess($uri)
+    public function hasAccess(string $uri, string $guardName)
     {
-//        dd($uri);
-        return $this->hasPermissionTo($uri);
+        return $this->hasPermissionTo($uri, $guardName);
     }
 
     public function isAdmin()

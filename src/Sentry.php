@@ -164,9 +164,9 @@ class Sentry extends Model
         return Assessor::isGuestURI(empty($uri) ? Route::current()->uri : explode('@', $uri)[0]);
     }
 
-    public static function verifyURIDatabaseExist($uri = null)
+    public static function verifyURIDatabaseExist(string | null $uri = null, string $currentGuard = 'web')
     {
-        return URI::verifyURIDatabaseExist(!empty($uri) ? $uri : URI::getCurrentURI());
+        return URI::verifyURIDatabaseExist($uri ?? URI::getCurrentURI(), $currentGuard);
     }
 
     public static function throwException()
