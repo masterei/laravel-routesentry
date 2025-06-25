@@ -31,6 +31,7 @@ class Sentry extends Model
         static::addGlobalScope('published', function (Builder $builder) {
             $builder->select([
                 self::baseTable() . '.id',
+                 self::baseTable() . '.permission_id',
                 self::permissionTable() . '.name as uri',
                 self::baseTable() . '.method',
                 self::permissionTable() . '.guard_name',
