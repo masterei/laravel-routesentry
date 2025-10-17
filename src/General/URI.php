@@ -31,7 +31,7 @@ class URI
     {
         foreach (Route::getRoutes()->getRoutes() as $key => $route){
             if(isset($route->action['as']) && $route->action['as'] == $name){
-                return self::formatURI($route->uri, array_intersect(Config::ALLOWABLE_METHODS, $route->methods)[0]);
+                return self::formatURI($route->uri, array_values(array_intersect(Config::ALLOWABLE_METHODS, $route->methods))[0]);
             }
         }
 
